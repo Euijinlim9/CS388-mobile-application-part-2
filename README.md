@@ -10,17 +10,16 @@
 
 ### Description
 
-[Description of your app]
+Pet Health Passport is a mobile app that helps pet owners store and manage their pet’s health information in one place. Users can save vaccination records, medical history, microchip numbers, and vet documents digitally. The app also sends reminders for upcoming vet visits, vaccinations, and medication schedules, making it easier to keep pets healthy and organized.
 
 ### App Evaluation
 
-[Evaluation of your app across the following attributes]
-- **Category:**
-- **Mobile:**
-- **Story:**
-- **Market:**
-- **Habit:**
-- **Scope:**
+- **Category:** Lifestyle / Health / Pet Care  
+- **Mobile:** Yes (Android-focused)  
+- **Story:** Pet owners often lose paper records or forget important dates. This app centralizes all pet health data and automates reminders.  
+- **Market:** Large — millions of pet owners, especially useful for busy individuals and travelers  
+- **Habit:** Medium usage, increased by reminders and notifications  
+- **Scope:** Moderate — combines storage, automation, and QR features  
 
 ## Product Spec
 
@@ -28,53 +27,114 @@
 
 **Required Features**
 
-1. [fill in your required user features here]
-2. ...
-3. ...
+- Create and manage pet profiles  
+- Store vaccination records and medical history  
+- Add microchip information  
+- Set vet appointment reminders  
+- Google Calendar auto-sync for events  
 
 **Optional Features**
 
-1. [fill in your optional user features here]
-2. ...
-3. ...
+- Generate a unique QR code for each pet  
+- Scan QR code to instantly access pet profile  
+- Display key info:
+  - Name
+  - Breed
+  - Age
+  - Medical info
+  - Allergies
+  - Emergency contacts  
+- Lost pet mode:
+  - Finder scans QR and sees owner contact details  
+- Share QR:
+  - Digitally (link/image)
+  - Print for collar tags  
+
 
 ### 2. Screen Archetypes
 
-- [list first screen here]
-  - [list associated required story here]
-  - ...
-- [list second screen here]
-  - [list associated required story here]
-  - ...
+- **Dashboard / Home Screen**
+  - User can view pet overview (name, photo, basic info)
+  - User can see upcoming reminders (vet visits, vaccines)
+  - User can quickly navigate to profile, records, or QR code
+
+- **Pet Profile Screen**
+  - User can view and edit pet details (name, breed, age, microchip)
+  - User can access emergency contact information
+  - User can enable/disable lost pet mode
+
+- **Medical Records Screen**
+  - User can view vaccination records and medical history
+  - User can upload documents (images/PDFs)
+  - User can scan documents using OCR to auto-fill data
+
+- **Reminder Screen**
+  - User can view upcoming reminders
+  - User can create/edit reminders (vaccines, medications, vet visits)
+  - User can sync reminders with Google Calendar
+
+- **QR Code Screen**
+  - User can generate a QR code for each pet
+  - User can share or download QR code
+  - User can control what information is visible when scanned
+
+- **Add/Edit Screen**
+  - User can input or update pet information
+  - User can add medical records or reminders
+
+---
 
 ### 3. Navigation
 
 **Tab Navigation** (Tab to Screen)
 
-* [fill out your first tab]
-* [fill out your second tab]
-* [fill out your third tab]
+* Home → Dashboard Screen  
+* Records → Medical Records Screen  
+* Reminders → Reminder Screen  
+* Profile → Pet Profile Screen  
+* QR → QR Code Screen  
 
 **Flow Navigation** (Screen to Screen)
 
-- [list first screen here]
-  - [list screen navigation here]
-  - ...
-- [list second screen here]
-  - [list screen navigation here]
-  - ...
+- **Dashboard Screen**
+  - Tap pet → Pet Profile Screen  
+  - Tap reminder → Reminder Screen  
+  - Tap QR → QR Code Screen  
+
+- **Pet Profile Screen**
+  - Tap edit → Add/Edit Screen  
+
+- **Medical Records Screen**
+  - Tap add record → Add/Edit Screen  
+  - Tap document → View Document Screen  
+
+- **Reminder Screen**
+  - Tap add reminder → Add/Edit Screen  
+  - Tap event → Edit Reminder Screen  
+
+- **QR Code Screen**
+  - Tap share → Share Options (link/image/download)  
+
+- **Add/Edit Screen**
+  - Save → Return to previous screen  
+
+---
 
 ## Wireframes
 
-[Add picture of your hand sketched wireframes in this section] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+[Add picture of your hand sketched wireframes in this section]  
+<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
 
 <br>
-
 <br>
 
 ### [BONUS] Digital Wireframes & Mockups
 
+- Designed using Figma (optional)
+
 ### [BONUS] Interactive Prototype
+
+- Clickable prototype created in Figma (optional)
 
 <br>
 
