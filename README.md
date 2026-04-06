@@ -1,4 +1,4 @@
-# Milestone 1 - APP_NAME_HERE (Unit 7)
+# Milestone 1 - Pet Health Passport (Unit 7)
 
 ## Table of Contents
 
