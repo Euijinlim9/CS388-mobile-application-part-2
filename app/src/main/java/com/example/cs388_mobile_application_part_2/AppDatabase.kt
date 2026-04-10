@@ -1,12 +1,11 @@
 package com.example.cs388_mobile_application_part_2
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [PetEntity::class, EventEntity::class], version = 1)
+@Database(entities = [PetEntity::class, EventEntity::class], version = 3)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun petDao(): PetDao
     abstract fun eventDao(): EventDao
@@ -22,6 +21,6 @@ abstract class AppDatabase: RoomDatabase() {
             Room.databaseBuilder(
                 context.applicationContext,
                 AppDatabase::class.java, "pet-db"
-            ).build()
+            ).fallbackToDestructiveMigration().build()
     }
 }

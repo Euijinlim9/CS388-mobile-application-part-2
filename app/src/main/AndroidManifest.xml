@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS388mobileapplicationpart2">
         <activity
+            android:name=".PetDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

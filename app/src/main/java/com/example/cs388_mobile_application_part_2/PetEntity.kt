@@ -8,5 +8,6 @@ import androidx.room.PrimaryKey
 data class PetEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "age") val age: Int
+    @ColumnInfo(name = "age") val age: Int,
+    @ColumnInfo(name = "photoUri") val photoUri: String? = null
 )
