@@ -11,39 +11,46 @@
         android:id="@+id/settings_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reminder Settings"
+        android:text="@string/settings_title"
         android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/switch_notifications"
+    <TextView
+        android:id="@+id/settings_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/settings_backup_description"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+
+    <TextView
+        android:id="@+id/settings_data_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Enable app notifications"
-        android:checked="true" />
+        android:text="@string/settings_data_section"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/switch_google_calendar"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_export_backup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="Enable Google Calendar sync"
-        android:checked="false" />
+        android:text="@string/settings_export_button" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_import_backup"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/settings_import_button" />
 
     <TextView
         android:id="@+id/settings_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Status appears here"
+        android:text="@string/settings_backup_ready"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
-
-    <TextView
-        android:id="@+id/settings_app_version"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Version"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
 </LinearLayout>

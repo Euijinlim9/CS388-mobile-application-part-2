@@ -12,6 +12,9 @@ interface PetDao{
     @Query("SELECT * FROM pets ORDER BY name COLLATE NOCASE ASC")
     fun getAllPets(): Flow<List<PetEntity>>
 
+    @Query("SELECT * FROM pets ORDER BY id ASC")
+    suspend fun getAllPetsSnapshot(): List<PetEntity>
+
     @Query("SELECT * FROM pets WHERE id = :petId")
     suspend fun getPetById(petId: Long): PetEntity?
 
@@ -23,4 +26,7 @@ interface PetDao{
 
     @Query("DELETE FROM pets WHERE id = :petId")
     suspend fun deletePet(petId: Long)
+
+    @Query("DELETE FROM pets")
+    suspend fun deleteAllPets()
 }

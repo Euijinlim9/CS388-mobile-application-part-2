@@ -29,13 +29,14 @@
     <string name="unknown_event_time">Time not set</string>
     <string name="calendar_icon_content_description">Calendar sync</string>
 
-    <string name="settings_title">Reminder Settings</string>
-    <string name="settings_notifications">Enable app notifications</string>
-    <string name="settings_google_calendar">Enable Google Calendar sync</string>
-    <string name="settings_status_default">Status appears here</string>
-    <string name="settings_status_template">Notifications: %1$s | Calendar sync: %2$s</string>
-    <string name="settings_on">On</string>
-    <string name="settings_off">Off</string>
-    <string name="settings_version">Version</string>
-    <string name="settings_version_template">Version %1$s</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_backup_description">Manage your app preferences and pet data.</string>
+    <string name="settings_data_section">Data Management</string>
+    <string name="settings_export_button">Export pet data</string>
+    <string name="settings_import_button">Import pet data</string>
+    <string name="settings_backup_ready">Select a settings option.</string>
+    <string name="settings_export_success">Data exported: %1$d pets and %2$d events.</string>
+    <string name="settings_export_failed">Data export failed. Please try again.</string>
+    <string name="settings_import_success">Data imported: %1$d pets and %2$d events.</string>
+    <string name="settings_import_failed">Data import failed. Please check the file and try again.</string>
 </resources>

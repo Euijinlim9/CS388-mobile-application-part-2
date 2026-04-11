@@ -12,6 +12,9 @@ interface EventDao {
     @Query("SELECT * FROM events WHERE petId = :petId ORDER BY time ASC")
     fun getEventsForPet(petId: Long): Flow<List<EventEntity>>
 
+    @Query("SELECT * FROM events ORDER BY id ASC")
+    suspend fun getAllEventsSnapshot(): List<EventEntity>
+
     @Query("SELECT * FROM events WHERE time > (strftime('%s','now') * 1000) ORDER BY time ASC")
     fun getUpcomingEvents(): Flow<List<EventEntity>>
 
@@ -21,6 +24,9 @@ interface EventDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEvent(event: EventEntity): Long
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertEvents(events: List<EventEntity>)
+
     @Update
     suspend fun updateEvent(event: EventEntity)
 
@@ -29,4 +35,7 @@ interface EventDao {
 
     @Query("DELETE FROM events WHERE petId = :petId")
     suspend fun deleteEventsForPet(petId: Long)
+
+    @Query("DELETE FROM events")
+    suspend fun deleteAllEvents()
 }
