@@ -1,14 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
-    kotlin("plugin.serialization")
-    id("com.google.devtools.ksp")
 }
 
 android {
     namespace = "com.example.cs388_mobile_application_part_2"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.cs388_mobile_application_part_2"
@@ -16,7 +12,6 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -41,14 +36,13 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.recyclerview)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.scalars)
+    implementation(libs.okhttp.logging)
+    implementation(libs.glide)
     implementation(libs.androidx.fragment.ktx)
-    implementation(libs.kotlinx.serialization.json)
-    ksp(libs.androidx.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    annotationProcessor(libs.androidx.room.compiler)
 }

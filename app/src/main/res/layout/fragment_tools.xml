@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🛠 Tools"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="16dp" />
+
+        <!-- Tip Calculator -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💰 Tip Calculator"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/etBillAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Bill amount ($)"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/etTipPercent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tip % (e.g. 18)"
+                    android:inputType="numberDecimal" />
+
+                <Button
+                    android:id="@+id/btnCalcTip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calculate"
+                    android:layout_marginTop="8dp" />
+
+                <TextView
+                    android:id="@+id/tvTipResult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Unit Converter -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📏 Unit Converter (km ↔ miles)"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/etUnitInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter value"
+                    android:inputType="numberDecimal" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <Button
+                        android:id="@+id/btnKmToMiles"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="km → mi"
+                        android:layout_marginEnd="4dp" />
+
+                    <Button
+                        android:id="@+id/btnMilesToKm"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="mi → km"
+                        android:layout_marginStart="4dp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvUnitResult"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Password Generator -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔐 Password Generator"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/etPasswordLength"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Password length (e.g. 16)"
+                    android:inputType="number" />
+
+                <Button
+                    android:id="@+id/btnGenPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Generate"
+                    android:layout_marginTop="8dp" />
+
+                <TextView
+                    android:id="@+id/tvPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:fontFamily="monospace"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</ScrollView>
