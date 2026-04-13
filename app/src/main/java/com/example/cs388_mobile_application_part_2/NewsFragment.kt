@@ -64,7 +64,7 @@ class NewsFragment : Fragment() {
                     val child = children.item(j)
                     when (child.nodeName) {
                         "name" -> name = child.attributes?.getNamedItem("value")?.nodeValue ?: ""
-                        "thumbnail" -> thumbnail = child.attributes?.getNamedItem("value")?.nodeValue ?: ""
+                        "thumbnail" -> thumbnail = child.textContent?.trim() ?: ""
                         "yearpublished" -> year = child.attributes?.getNamedItem("value")?.nodeValue ?: ""
                     }
                 }
@@ -74,7 +74,7 @@ class NewsFragment : Fragment() {
             }
             adapter.notifyDataSetChanged()
         } catch (e: Exception) {
-            Toast.makeText(requireContext(), "Error parsing data", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Error parsing data: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
 }
