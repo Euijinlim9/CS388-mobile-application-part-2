@@ -69,8 +69,8 @@ class NewsFragment : Fragment() {
                         "yearpublished" -> year = child.attributes?.getNamedItem("value")?.nodeValue ?: ""
                     }
                 }
-                Log.i("Original", xml)
-                Log.i("NewsFragment", "Name: $name, Thumbnail: $thumbnail, Year: $year")
+//                Log.i("Original", xml)
+//                Log.i("NewsFragment", "Name: $name, Thumbnail: $thumbnail, Year: $year")
                 if (name.isNotEmpty()) {
                     games.add(BoardGame(id, rank, name, thumbnail, year))
                 }
