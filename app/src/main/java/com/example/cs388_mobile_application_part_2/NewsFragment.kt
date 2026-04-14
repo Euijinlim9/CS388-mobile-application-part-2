@@ -1,6 +1,7 @@
 package com.example.cs388_mobile_application_part_2
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,10 +65,12 @@ class NewsFragment : Fragment() {
                     val child = children.item(j)
                     when (child.nodeName) {
                         "name" -> name = child.attributes?.getNamedItem("value")?.nodeValue ?: ""
-                        "thumbnail" -> thumbnail = child.textContent?.trim() ?: ""
+                        "thumbnail" -> thumbnail = child.attributes?.getNamedItem("value")?.nodeValue ?: ""
                         "yearpublished" -> year = child.attributes?.getNamedItem("value")?.nodeValue ?: ""
                     }
                 }
+                Log.i("Original", xml)
+                Log.i("NewsFragment", "Name: $name, Thumbnail: $thumbnail, Year: $year")
                 if (name.isNotEmpty()) {
                     games.add(BoardGame(id, rank, name, thumbnail, year))
                 }
