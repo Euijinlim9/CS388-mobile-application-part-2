@@ -89,7 +89,7 @@ Board Game Companion is a mobile app designed to enhance the tabletop gaming exp
 
 ## Wireframes
 
-*Hand-drawn or digital wireframes to be added here.*
+<img src="file.png" width=600>
 
 ---
 
@@ -100,6 +100,10 @@ Board Game Companion is a mobile app designed to enhance the tabletop gaming exp
     - Used for hot games feed and game search
 - **Google Maps SDK for Android** — interactive map display and GPS centering
 - **Google Places API** — nearby board game store discovery
+
+## App Demo
+
+<img src="demo.gif" width=600>
 
 # Milestone 2 - Build Sprint 1 (Unit 8)
 
