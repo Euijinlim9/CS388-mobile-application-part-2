@@ -1,6 +1,12 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+}
+
+val localProps = Properties().apply {
+    val f = rootProject.file("local.properties")
+    if (f.exists()) load(f.inputStream())
 }
 
 android {
@@ -14,7 +20,12 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders["MAPS_API_KEY"] = localProps.getProperty("MAPS_API_KEY", "")
+        
+        buildConfigField("String", "API_KEY", "\"${localProps.getProperty("API_KEY", "")}\"")
+        buildConfigField("String", "MAPS_API_KEY", "\"${localProps.getProperty("MAPS_API_KEY", "")}\"")
     }
+
     buildFeatures {
         buildConfig = true
     }
@@ -32,7 +43,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    compileSdkMinor = 1
 }
 
 dependencies {
@@ -47,6 +57,8 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.glide)
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.google.maps)
+    implementation(libs.google.places)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

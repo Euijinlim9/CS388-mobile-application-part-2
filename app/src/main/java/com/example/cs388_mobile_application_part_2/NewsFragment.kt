@@ -49,7 +49,11 @@ class NewsFragment : Fragment() {
 
     private fun parseHotGames(xml: String) {
         try {
-            val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+            val doc = DocumentBuilderFactory.newInstance().also {
+                it.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
+                it.setFeature("http://xml.org/sax/features/external-general-entities", false)
+                it.setFeature("http://xml.org/sax/features/external-parameter-entities", false)
+            }.newDocumentBuilder()
                 .parse(InputSource(StringReader(xml)))
             val items = doc.getElementsByTagName("item")
             for (i in 0 until items.length) {
