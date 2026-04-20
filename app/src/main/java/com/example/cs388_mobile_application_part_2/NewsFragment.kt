@@ -1,12 +1,13 @@
 package com.example.cs388_mobile_application_part_2
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,10 +30,13 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerNews)
         val progress = view.findViewById<ProgressBar>(R.id.progressBar)
+        val btnFavorites = view.findViewById<Button>(R.id.btnViewFavorites)
 
         adapter = NewsAdapter(games)
         recycler.layoutManager = LinearLayoutManager(requireContext())
         recycler.adapter = adapter
+
+        btnFavorites.setOnClickListener { showFavoritesDialog() }
 
         progress.visibility = View.VISIBLE
         RetrofitClient.service.getHotGames().enqueue(object : Callback<String> {
@@ -45,6 +49,30 @@ class NewsFragment : Fragment() {
                 Toast.makeText(requireContext(), "Failed to load games", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun showFavoritesDialog() {
+        val favs = NewsAdapter.getFavorites(requireContext())
+        if (favs.isEmpty()) {
+            Toast.makeText(requireContext(), "No favorites yet — tap ⭐ on a card to save it", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val names = favs.map { "⭐ ${it.name} (${it.yearPublished})" }.toTypedArray()
+        AlertDialog.Builder(requireContext())
+            .setTitle("Your Favorites")
+            .setItems(names) { _, index ->
+                val game = favs[index]
+                val intent = android.content.Intent(requireContext(), GameDetailActivity::class.java).apply {
+                    putExtra("id", game.id)
+                    putExtra("name", game.name)
+                    putExtra("thumbnail", game.thumbnail)
+                    putExtra("year", game.yearPublished)
+                    putExtra("rank", game.rank)
+                }
+                startActivity(intent)
+            }
+            .setPositiveButton("Close", null)
+            .show()
     }
 
     private fun parseHotGames(xml: String) {
@@ -69,8 +97,6 @@ class NewsFragment : Fragment() {
                         "yearpublished" -> year = child.attributes?.getNamedItem("value")?.nodeValue ?: ""
                     }
                 }
-//                Log.i("Original", xml)
-//                Log.i("NewsFragment", "Name: $name, Thumbnail: $thumbnail, Year: $year")
                 if (name.isNotEmpty()) {
                     games.add(BoardGame(id, rank, name, thumbnail, year))
                 }
