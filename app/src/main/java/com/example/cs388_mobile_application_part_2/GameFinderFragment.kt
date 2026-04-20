@@ -58,7 +58,8 @@ class GameFinderFragment : Fragment() {
         RetrofitClient.service.searchGames(query).enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 progress.visibility = View.GONE
-                response.body()?.let { parseSearchResults(it) }
+                val body = response.body() ?: return
+                parseSearchResults(body)
             }
             override fun onFailure(call: Call<String>, t: Throwable) {
                 progress.visibility = View.GONE
@@ -85,12 +86,46 @@ class GameFinderFragment : Fragment() {
                         "yearpublished" -> year = child.attributes?.getNamedItem("value")?.nodeValue ?: ""
                     }
                 }
-                if (name.isNotEmpty()) results.add(BoardGame(id, i + 1, name, "", year))
+                if (name.isNotEmpty()) {
+                    val game = BoardGame(id, i + 1, name, "", year)
+                    results.add(game)
+                    fetchThumbnail(game)
+                }
             }
             adapter.notifyDataSetChanged()
             if (results.isEmpty()) Toast.makeText(requireContext(), "No games found", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             Toast.makeText(requireContext(), "Error parsing results", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun fetchThumbnail(game: BoardGame) {
+        RetrofitClient.service.getGameDetails(game.id, 0).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                val body = response.body() ?: return
+                try {
+                    val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                        .parse(InputSource(StringReader(body)))
+                    val items = doc.getElementsByTagName("item")
+                    if (items.length == 0) return
+                    val children = items.item(0).childNodes
+                    for (i in 0 until children.length) {
+                        val child = children.item(i)
+                        if (child.nodeName == "thumbnail") {
+                            val thumb = child.textContent?.trim() ?: ""
+                            if (thumb.isNotEmpty()) {
+                                val index = results.indexOfFirst { it.id == game.id }
+                                if (index >= 0) {
+                                    results[index] = results[index].copy(thumbnail = thumb)
+                                    adapter.notifyItemChanged(index)
+                                }
+                            }
+                            break
+                        }
+                    }
+                } catch (e: Exception) { }
+            }
+            override fun onFailure(call: Call<String>, t: Throwable) { }
+        })
     }
 }
