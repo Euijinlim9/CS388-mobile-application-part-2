@@ -49,10 +49,11 @@ class GameDetailActivity : AppCompatActivity() {
         }
 
         progress.visibility = View.VISIBLE
-        RetrofitClient.service.getGameDetails(id).enqueue(object : Callback<String> {
+        RetrofitClient.service.getGameDetails(id, 1).enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 progress.visibility = View.GONE
-                response.body()?.let { parseDetails(it, tvRating, tvPlayers, tvTime, tvDesc) }
+                val body = response.body() ?: return
+                parseDetails(body, tvRating, tvPlayers, tvTime, tvDesc)
             }
             override fun onFailure(call: Call<String>, t: Throwable) {
                 progress.visibility = View.GONE
@@ -63,10 +64,8 @@ class GameDetailActivity : AppCompatActivity() {
 
     private fun parseDetails(xml: String, tvRating: TextView, tvPlayers: TextView, tvTime: TextView, tvDesc: TextView) {
         try {
-            val doc = DocumentBuilderFactory.newInstance().also {
-                it.setFeature("http://xml.org/sax/features/external-general-entities", false)
-                it.setFeature("http://xml.org/sax/features/external-parameter-entities", false)
-            }.newDocumentBuilder().parse(InputSource(StringReader(xml)))
+            val doc = DocumentBuilderFactory.newInstance()
+                .newDocumentBuilder().parse(InputSource(StringReader(xml)))
 
             val items = doc.getElementsByTagName("item")
             if (items.length == 0) return
