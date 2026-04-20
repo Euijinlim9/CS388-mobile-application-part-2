@@ -16,6 +16,8 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import androidx.core.content.edit
+import androidx.core.net.toUri
 
 class AccountFragment : Fragment() {
 
@@ -55,7 +57,7 @@ class AccountFragment : Fragment() {
             showLoggedIn(prefs.getString(KEY_USERNAME, "") ?: "")
             loadProfilePhoto(prefs.getString(KEY_PHOTO_URI, null))
         }
-
+        showLoggedOut()
         setupLogin(view, prefs)
         setupRegister(view, prefs)
 
@@ -90,6 +92,7 @@ class AccountFragment : Fragment() {
                 showLoggedIn(user)
                 loadProfilePhoto(prefs.getString(KEY_PHOTO_URI, null))
                 tvError.visibility = View.GONE
+                setupSettings(view, prefs)
             } else {
                 tvError.text = "Invalid username or password"
                 tvError.visibility = View.VISIBLE
@@ -121,11 +124,41 @@ class AccountFragment : Fragment() {
                         .apply()
                     showLoggedIn(user)
                     tvError.visibility = View.GONE
+                    setupSettings(view, prefs)
                 }
             }
         }
     }
 
+    private fun setupSettings(view: View, prefs: android.content.SharedPreferences){
+        val etUser = view.findViewById<EditText>(R.id.etChangeUsername)
+        val etPass = view.findViewById<EditText>(R.id.etChangePassword)
+        val etOldPass = view.findViewById<EditText>(R.id.etOldPassword)
+        val tvError = view.findViewById<TextView>(R.id.tvChangeError)
+
+        view.findViewById<Button>(R.id.btnEditProfile).setOnClickListener {
+            val user = etUser.text.toString().trim()
+            val pass = etPass.text.toString()
+            val oldPass = etOldPass.text.toString()
+            val savedPass = prefs.getString(KEY_PASSWORD, null)
+            if (oldPass == savedPass){
+                if(user.isNotEmpty()){
+                    prefs.edit { putString(KEY_USERNAME, user) }
+                    showLoggedIn(user)
+                }
+                if(pass.isNotEmpty()){
+                    prefs.edit { putString(KEY_PASSWORD, pass) }
+                }
+                tvError.visibility = View.GONE
+            }else{
+                tvError.text = "Invalid password"
+                tvError.visibility = View.VISIBLE
+            }
+            etUser.text.clear()
+            etPass.text.clear()
+            etOldPass.text.clear()
+        }
+    }
     private fun showLoggedIn(username: String) {
         layoutLoggedOut.visibility = View.GONE
         layoutLoggedIn.visibility = View.VISIBLE
@@ -139,12 +172,12 @@ class AccountFragment : Fragment() {
 
     private fun savePhotoUri(uri: String) {
         requireContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-            .edit().putString(KEY_PHOTO_URI, uri).apply()
+            .edit { putString(KEY_PHOTO_URI, uri) }
     }
 
     private fun loadProfilePhoto(uriString: String?) {
         if (!uriString.isNullOrEmpty()) {
-            Glide.with(this).load(Uri.parse(uriString)).circleCrop().into(imgProfile)
+            Glide.with(this).load(uriString.toUri()).circleCrop().into(imgProfile)
         }
     }
 }
