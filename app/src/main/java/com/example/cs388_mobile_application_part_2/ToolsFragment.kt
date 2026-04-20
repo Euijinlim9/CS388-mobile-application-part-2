@@ -1,5 +1,6 @@
 package com.example.cs388_mobile_application_part_2
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-
+@SuppressLint("SetTextI18n")
 class ToolsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -59,7 +60,7 @@ class ToolsFragment : Fragment() {
     private fun setupPasswordGenerator(view: View) {
         val etLength = view.findViewById<EditText>(R.id.etPasswordLength)
         val tvPassword = view.findViewById<TextView>(R.id.tvPassword)
-        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&*()"
+        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()"
 
         view.findViewById<Button>(R.id.btnGenPassword).setOnClickListener {
             val length = etLength.text.toString().toIntOrNull()?.coerceIn(4, 64) ?: 16

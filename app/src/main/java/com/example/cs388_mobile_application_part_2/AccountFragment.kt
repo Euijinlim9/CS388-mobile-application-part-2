@@ -1,9 +1,9 @@
 package com.example.cs388_mobile_application_part_2
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import androidx.core.content.edit
 import androidx.core.net.toUri
-
+@SuppressLint("SetTextI18n")
 class AccountFragment : Fragment() {
 
     private val PREFS = "user_prefs"
@@ -62,7 +62,7 @@ class AccountFragment : Fragment() {
         setupRegister(view, prefs)
 
         view.findViewById<Button>(R.id.btnLogout).setOnClickListener {
-            prefs.edit().putBoolean(KEY_LOGGED_IN, false).apply()
+            prefs.edit { putBoolean(KEY_LOGGED_IN, false) }
             showLoggedOut()
         }
 
@@ -88,7 +88,7 @@ class AccountFragment : Fragment() {
             val savedPass = prefs.getString(KEY_PASSWORD, null)
 
             if (user == savedUser && pass == savedPass) {
-                prefs.edit().putBoolean(KEY_LOGGED_IN, true).apply()
+                prefs.edit { putBoolean(KEY_LOGGED_IN, true) }
                 showLoggedIn(user)
                 loadProfilePhoto(prefs.getString(KEY_PHOTO_URI, null))
                 tvError.visibility = View.GONE
@@ -117,11 +117,11 @@ class AccountFragment : Fragment() {
                 pass != confirm -> { tvError.text = "Passwords do not match"; tvError.visibility = View.VISIBLE }
                 prefs.contains(KEY_USERNAME) -> { tvError.text = "An account already exists. Please login."; tvError.visibility = View.VISIBLE }
                 else -> {
-                    prefs.edit()
-                        .putString(KEY_USERNAME, user)
-                        .putString(KEY_PASSWORD, pass)
-                        .putBoolean(KEY_LOGGED_IN, true)
-                        .apply()
+                    prefs.edit {
+                        putString(KEY_USERNAME, user)
+                            .putString(KEY_PASSWORD, pass)
+                            .putBoolean(KEY_LOGGED_IN, true)
+                    }
                     showLoggedIn(user)
                     tvError.visibility = View.GONE
                     setupSettings(view, prefs)

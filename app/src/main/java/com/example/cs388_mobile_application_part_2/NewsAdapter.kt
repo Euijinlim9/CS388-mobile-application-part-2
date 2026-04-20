@@ -1,5 +1,6 @@
 package com.example.cs388_mobile_application_part_2
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -10,7 +11,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import androidx.core.content.edit
 
+@SuppressLint("SetTextI18n")
 class NewsAdapter(private val games: List<BoardGame>) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -73,25 +76,25 @@ class NewsAdapter(private val games: List<BoardGame>) : RecyclerView.Adapter<New
             context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getBoolean(id, false)
 
         fun setFavorite(context: Context, game: BoardGame, fav: Boolean) {
-            val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
-            val ids = getFavoriteIds(context).toMutableSet()
-            if (fav) {
-                prefs.putBoolean(game.id, true)
-                prefs.putString("name_${game.id}", game.name)
-                prefs.putString("thumb_${game.id}", game.thumbnail)
-                prefs.putString("year_${game.id}", game.yearPublished)
-                prefs.putInt("rank_${game.id}", game.rank)
-                ids.add(game.id)
-            } else {
-                prefs.remove(game.id)
-                prefs.remove("name_${game.id}")
-                prefs.remove("thumb_${game.id}")
-                prefs.remove("year_${game.id}")
-                prefs.remove("rank_${game.id}")
-                ids.remove(game.id)
+            context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit {
+                val ids = getFavoriteIds(context).toMutableSet()
+                if (fav) {
+                    putBoolean(game.id, true)
+                    putString("name_${game.id}", game.name)
+                    putString("thumb_${game.id}", game.thumbnail)
+                    putString("year_${game.id}", game.yearPublished)
+                    putInt("rank_${game.id}", game.rank)
+                    ids.add(game.id)
+                } else {
+                    remove(game.id)
+                    remove("name_${game.id}")
+                    remove("thumb_${game.id}")
+                    remove("year_${game.id}")
+                    remove("rank_${game.id}")
+                    ids.remove(game.id)
+                }
+                putStringSet("fav_ids", ids)
             }
-            prefs.putStringSet("fav_ids", ids)
-            prefs.apply()
         }
 
         fun getFavoriteIds(context: Context): Set<String> =

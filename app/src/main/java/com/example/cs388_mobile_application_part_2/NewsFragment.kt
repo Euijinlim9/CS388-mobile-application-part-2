@@ -1,5 +1,6 @@
 package com.example.cs388_mobile_application_part_2
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +18,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
-
+@SuppressLint("NotifyDataSetChanged")
 class NewsFragment : Fragment() {
 
     private val games = mutableListOf<BoardGame>()

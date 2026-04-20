@@ -1,5 +1,6 @@
 package com.example.cs388_mobile_application_part_2
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -14,7 +15,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
-
+@SuppressLint("SetTextI18n")
 class GameDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,7 +115,7 @@ class GameDetailActivity : AppCompatActivity() {
                 .replace("&ndash;", "–")
                 .ifEmpty { "No description available" }
 
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             tvDesc.text = "Error loading details"
         }
     }

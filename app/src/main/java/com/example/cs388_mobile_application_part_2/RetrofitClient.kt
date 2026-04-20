@@ -4,7 +4,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
-val apiKey = BuildConfig.API_KEY
+const val apiKey = BuildConfig.API_KEY
 object RetrofitClient {
     private const val BASE_URL = "https://boardgamegeek.com/xmlapi2/"
     val service: BggApiService by lazy {

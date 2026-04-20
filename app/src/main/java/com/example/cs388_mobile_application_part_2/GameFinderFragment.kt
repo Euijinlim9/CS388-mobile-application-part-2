@@ -1,5 +1,6 @@
 package com.example.cs388_mobile_application_part_2
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +19,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
-
+@SuppressLint("NotifyDataSetChanged")
 class GameFinderFragment : Fragment() {
 
     private val results = mutableListOf<BoardGame>()
@@ -94,7 +95,7 @@ class GameFinderFragment : Fragment() {
             }
             adapter.notifyDataSetChanged()
             if (results.isEmpty()) Toast.makeText(requireContext(), "No games found", Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Toast.makeText(requireContext(), "Error parsing results", Toast.LENGTH_SHORT).show()
         }
     }
@@ -123,7 +124,7 @@ class GameFinderFragment : Fragment() {
                             break
                         }
                     }
-                } catch (e: Exception) { }
+                } catch (_: Exception) { }
             }
             override fun onFailure(call: Call<String>, t: Throwable) { }
         })

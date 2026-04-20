@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         }.attach()
     }
 
-    private inner class MainPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
+    private class MainPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
         override fun getItemCount() = 4
         override fun createFragment(position: Int): Fragment = when (position) {
             0 -> NewsFragment()

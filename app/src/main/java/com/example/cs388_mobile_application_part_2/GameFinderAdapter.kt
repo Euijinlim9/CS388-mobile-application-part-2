@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import androidx.core.graphics.toColorInt
 
 class GameFinderAdapter(private val games: List<BoardGame>) : RecyclerView.Adapter<GameFinderAdapter.ViewHolder>() {
 
@@ -25,12 +26,12 @@ class GameFinderAdapter(private val games: List<BoardGame>) : RecyclerView.Adapt
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val game = games[position]
         holder.tvName.text = game.name
-        holder.tvYear.text = if (game.yearPublished.isNotEmpty()) game.yearPublished else "Year unknown"
+        holder.tvYear.text = game.yearPublished.ifEmpty { "Year unknown" }
         if (game.thumbnail.isNotEmpty()) {
             Glide.with(holder.imgThumb.context).load(game.thumbnail).centerCrop().into(holder.imgThumb)
         } else {
             holder.imgThumb.setImageDrawable(null)
-            holder.imgThumb.setBackgroundColor(android.graphics.Color.parseColor("#E0E0E0"))
+            holder.imgThumb.setBackgroundColor("#E0E0E0".toColorInt())
         }
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
