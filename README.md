@@ -89,7 +89,7 @@ Board Game Companion is a mobile app designed to enhance the tabletop gaming exp
 
 ## Wireframes
 
-*Hand-drawn or digital wireframes to be added here.*
+<img src="file.png" width=600>
 
 ---
 
@@ -105,33 +105,26 @@ Board Game Companion is a mobile app designed to enhance the tabletop gaming exp
 
 ## GitHub Project board
 
-[Add screenshot of your Project Board with three milestones visible in
-this section]
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img src="Screenshot 2026-04-15 111340.png" width=600>
 
 ## Issue cards
 
-- [Add screenshot of your Project Board with the issues that you've been working on for this unit's milestone] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
-- [Add screenshot of your Project Board with the issues that you're working on in the **NEXT sprint**. It should include issues for next unit with assigned owners.] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img src="Screenshot 2026-04-15 111340.png" width=600>
 
 ## Issues worked on this sprint
 
-- List the issues you completed this sprint
-- [Add giphy that shows current build progress for Milestone 2. Note: We will be looking for progression of work between Milestone 2 and 3. Make sure your giphys are not duplicated and clearly show the change from Sprint 1 to 2.]
+<img src="Screenshot 2026-04-15 111340.png" width=600>
 # Milestone 3 - Build Sprint 2 (Unit 9)
 
 ## GitHub Project board
 
-[Add screenshot of your Project Board with the updated status of issues for Milestone 3. Note that these should include the updated issues you worked on for this sprint and not be a duplicate of Milestone 2 Project board.] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img src="Screenshot 2026-04-15 111643.png" width=600>
 
 ## Completed user stories
 
-- List the completed user stories from this unit
-- List any pending user stories / any user stories you decided to cut
-from the original requirements
+<img src="Screenshot 2026-04-15 111643.png" width=600>
 
-[Add video/gif of your current application that shows build progress]
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img src="demo.gif" width=600>
 
 ## App Demo Video
 
