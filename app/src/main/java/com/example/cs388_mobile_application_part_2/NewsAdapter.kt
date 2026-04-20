@@ -1,5 +1,6 @@
 package com.example.cs388_mobile_application_part_2
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,17 @@ class NewsAdapter(private val games: List<BoardGame>) : RecyclerView.Adapter<New
                 .load(game.thumbnail)
                 .centerCrop()
                 .into(holder.imgThumbnail)
+        }
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, GameDetailActivity::class.java).apply {
+                putExtra("id", game.id)
+                putExtra("name", game.name)
+                putExtra("thumbnail", game.thumbnail)
+                putExtra("year", game.yearPublished)
+                putExtra("rank", game.rank)
+            }
+            context.startActivity(intent)
         }
     }
 
