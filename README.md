@@ -89,7 +89,7 @@ Board Game Companion is a mobile app designed to enhance the tabletop gaming exp
 
 ## Wireframes
 
-<img src="file.png" width=600>
+<img src="wireframe.png" width=600>
 
 ---
 
@@ -105,24 +105,24 @@ Board Game Companion is a mobile app designed to enhance the tabletop gaming exp
 
 ## GitHub Project board
 
-<img src="Screenshot 2026-04-15 111340.png" width=600>
+<img src="milestone 1.png" width=600>
 
 ## Issue cards
 
-<img src="Screenshot 2026-04-15 111340.png" width=600>
+<img src="milestone 1.png" width=600>
 
 ## Issues worked on this sprint
 
-<img src="Screenshot 2026-04-15 111340.png" width=600>
+<img src="milestone 1.png" width=600>
 # Milestone 3 - Build Sprint 2 (Unit 9)
 
 ## GitHub Project board
 
-<img src="Screenshot 2026-04-15 111643.png" width=600>
+<img src="milestone 2.png" width=600>
 
 ## Completed user stories
 
-<img src="Screenshot 2026-04-15 111643.png" width=600>
+<img src="milestone 2.png" width=600>
 
 <img src="demo.gif" width=600>
 
