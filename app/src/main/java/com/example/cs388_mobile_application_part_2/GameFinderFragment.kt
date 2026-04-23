@@ -1,6 +1,7 @@
 package com.example.cs388_mobile_application_part_2
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.xml.sax.InputSource
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,16 +30,25 @@ class GameFinderFragment : Fragment() {
 
     private val results = mutableListOf<BoardGame>()
     private lateinit var adapter: GameFinderAdapter
+    private lateinit var etSearch: EditText
+    private lateinit var progress: ProgressBar
+    //private val geminiApiKey = BuildConfig.GEMINI_API_KEY
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        if (uri == null) return@registerForActivityResult
+        handlePhotoSearch(uri)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_game_finder, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val etSearch = view.findViewById<EditText>(R.id.etSearch)
+        etSearch = view.findViewById(R.id.etSearch)
         val btnSearch = view.findViewById<Button>(R.id.btnSearch)
+        val btnPhotoSearch = view.findViewById<Button>(R.id.btnPhotoSearch)
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerGames)
-        val progress = view.findViewById<ProgressBar>(R.id.progressBar)
+        progress = view.findViewById(R.id.progressBar)
 
         adapter = GameFinderAdapter(results)
         recycler.layoutManager = LinearLayoutManager(requireContext())
@@ -46,8 +61,45 @@ class GameFinderFragment : Fragment() {
         }
 
         btnSearch.setOnClickListener { doSearch() }
+        btnPhotoSearch.setOnClickListener {
+                pickImageLauncher.launch("image/*")
+        }
         etSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) { doSearch(); true } else false
+        }
+    }
+
+    private fun handlePhotoSearch(uri: Uri) {
+
+        progress.visibility = View.VISIBLE
+        viewLifecycleOwner.lifecycleScope.launch {
+            val recognizedName = withContext(Dispatchers.IO) {
+                val imageBytes = readImageBytes(uri) ?: return@withContext null
+                GeminiVisionClient.detectBoardGameName(
+                    //apiKey = geminiApiKey,
+                    imageBytes = imageBytes
+                )
+            }
+
+            if (!isAdded) return@launch
+            progress.visibility = View.GONE
+
+            if (recognizedName.isNullOrBlank()) {
+                Toast.makeText(requireContext(), "Could not detect a board game", Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+
+            etSearch.setText(recognizedName)
+            search(recognizedName, progress)
+        }
+    }
+
+    private fun readImageBytes(uri: Uri): ByteArray? {
+        return try {
+            val resolver = requireContext().contentResolver
+            resolver.openInputStream(uri)?.use { it.readBytes() }
+        } catch (_: Exception) {
+            null
         }
     }
 

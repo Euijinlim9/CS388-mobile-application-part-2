@@ -1,6 +1,7 @@
 [versions]
-agp = "9.1.1"
+agp = "9.2.0"
 coreKtx = "1.18.0"
+firebaseBom = "34.12.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
@@ -11,11 +12,14 @@ constraintlayout = "2.2.1"
 viewpager2 = "1.1.0"
 retrofit = "3.0.0"
 okhttp = "5.3.2"
-glide = "5.0.5"
+glide = "5.0.7"
 fragment = "1.8.9"
+firebaseAppcheck = "19.0.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+firebase-ai = { module = "com.google.firebase:firebase-ai", version = "17.11.0" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -29,6 +33,8 @@ retrofit-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment" }
+firebase-appcheck = { group = "com.google.firebase", name = "firebase-appcheck", version.ref = "firebaseAppcheck" }
+firebase-appcheck-debug = { group = "com.google.firebase", name = "firebase-appcheck-debug", version.ref = "firebaseAppcheck" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
