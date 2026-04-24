@@ -10,12 +10,13 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.xml.sax.InputSource
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
 @SuppressLint("NotifyDataSetChanged")
@@ -40,16 +41,18 @@ class NewsFragment : Fragment() {
         btnFavorites.setOnClickListener { showFavoritesDialog() }
 
         progress.visibility = View.VISIBLE
-        RetrofitClient.service.getHotGames().enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                progress.visibility = View.GONE
-                response.body()?.let { parseHotGames(it) }
-            }
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                progress.visibility = View.GONE
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    RetrofitClient.service.getHotGames()
+                }
+                parseHotGames(response)
+            } catch (_: Exception) {
                 Toast.makeText(requireContext(), "Failed to load games", Toast.LENGTH_SHORT).show()
+            } finally {
+                progress.visibility = View.GONE
             }
-        })
+        }
     }
 
     private fun showFavoritesDialog() {

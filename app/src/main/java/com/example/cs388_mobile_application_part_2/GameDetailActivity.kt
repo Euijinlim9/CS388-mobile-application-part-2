@@ -8,11 +8,12 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.xml.sax.InputSource
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
 @SuppressLint("SetTextI18n")
@@ -50,17 +51,18 @@ class GameDetailActivity : AppCompatActivity() {
         }
 
         progress.visibility = View.VISIBLE
-        RetrofitClient.service.getGameDetails(id, 1).enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                progress.visibility = View.GONE
-                val body = response.body() ?: return
-                parseDetails(body, tvRating, tvPlayers, tvTime, tvDesc)
-            }
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                progress.visibility = View.GONE
+        lifecycleScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    RetrofitClient.service.getGameDetails(id, 1)
+                }
+                parseDetails(response, tvRating, tvPlayers, tvTime, tvDesc)
+            } catch (_: Exception) {
                 tvDesc.text = "Could not load details"
+            } finally {
+                progress.visibility = View.GONE
             }
-        })
+        }
     }
 
     private fun parseDetails(xml: String, tvRating: TextView, tvPlayers: TextView, tvTime: TextView, tvDesc: TextView) {

@@ -8,19 +8,16 @@ import com.google.firebase.ai.type.GenerativeBackend
 import com.google.firebase.ai.type.content
 
 object GeminiVisionClient {
-	private const val MODEL_NAME = "gemini-2.5-flash"
+	private const val MODEL_NAME = "gemini-3-flash-preview"
 	private const val PROMPT =
-		"Identify the board game shown in this image. Return only the board game title. If unsure, return UNKNOWN."
+		"Identify the board game shown in this image. Return only the board game title. If you think it is not a board game image, return UNKNOWN."
 
 	suspend fun detectBoardGameName(imageBytes: ByteArray): String? {
 		if (imageBytes.isEmpty()) return null
 		val imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size) ?: return null
 
 		return runCatching {
-			val model = Firebase.ai(
-				backend = GenerativeBackend.googleAI()
-			).generativeModel(MODEL_NAME)
-
+			val model = Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(MODEL_NAME)
 			val response = model.generateContent(
 				content {
 					text(PROMPT)

@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +16,16 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import androidx.core.content.edit
 import androidx.core.net.toUri
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 @SuppressLint("SetTextI18n")
 class AccountFragment : Fragment() {
 
@@ -31,6 +39,7 @@ class AccountFragment : Fragment() {
     private lateinit var layoutLoggedIn: LinearLayout
     private lateinit var tvWelcome: TextView
     private lateinit var imgProfile: ImageView
+    private var tempImageUri: Uri? = null
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -38,6 +47,15 @@ class AccountFragment : Fragment() {
             requireContext().contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
             savePhotoUri(uri.toString())
             loadProfilePhoto(uri.toString())
+        }
+    }
+
+    private val takePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success) {
+            tempImageUri?.let { uri ->
+                savePhotoUri(uri.toString())
+                loadProfilePhoto(uri.toString())
+            }
         }
     }
 
@@ -67,13 +85,51 @@ class AccountFragment : Fragment() {
         }
 
         view.findViewById<Button>(R.id.btnChangePhoto).setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                type = "image/*"
-                addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
-            pickImage.launch(intent)
+            showImageSourceDialog()
         }
+    }
+
+    private fun showImageSourceDialog() {
+        val options = arrayOf("Take Photo", "Choose from Gallery")
+        AlertDialog.Builder(requireContext())
+            .setTitle("Select Profile Image")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> openCamera()
+                    1 -> {
+                        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                            addCategory(Intent.CATEGORY_OPENABLE)
+                            type = "image/*"
+                            addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        }
+                        pickImage.launch(intent)
+                    }
+                }
+            }
+            .show()
+    }
+
+    private fun openCamera() {
+        val photoFile = try {
+            createImageFile()
+        } catch (_: Exception) {
+            null
+        }
+        photoFile?.also {
+            val photoURI: Uri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.fileprovider",
+                it
+            )
+            tempImageUri = photoURI
+            takePicture.launch(photoURI)
+        }
+    }
+
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val storageDir: File? = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
     }
 
     private fun setupLogin(view: View, prefs: android.content.SharedPreferences) {
