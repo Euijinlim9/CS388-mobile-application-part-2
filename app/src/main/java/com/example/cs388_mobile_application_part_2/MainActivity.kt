@@ -45,9 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         viewPager.adapter = MainPagerAdapter(this)
         Firebase.initialize(context = this)
-        Firebase.appCheck.installAppCheckProviderFactory(
-            DebugAppCheckProviderFactory.getInstance(),
-        )
+        Firebase.appCheck.installAppCheckProviderFactory(DebugAppCheckProviderFactory.getInstance())
 
         val auth = Firebase.auth
         if (auth.currentUser == null) {

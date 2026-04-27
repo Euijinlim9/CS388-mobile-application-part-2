@@ -8,7 +8,7 @@ import com.google.firebase.ai.type.GenerativeBackend
 import com.google.firebase.ai.type.content
 
 object GeminiVisionClient {
-	private const val MODEL_NAME = "gemini-3-flash-preview"
+	private const val MODEL_NAME = "gemini-3.1-flash-lite-preview"
 	private const val PROMPT =
 		"Identify the board game shown in this image. Return only the board game title. If you think it is not a board game image, return UNKNOWN."
 
