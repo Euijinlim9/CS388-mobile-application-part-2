@@ -1,9 +1,11 @@
 package com.example.cs388_mobile_application_part_2
 
+import android.content.Intent
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -40,6 +42,14 @@ class GameDetailActivity : AppCompatActivity() {
         val tvTime = findViewById<TextView>(R.id.tvDetailTime)
         val tvDesc = findViewById<TextView>(R.id.tvDetailDescription)
         val progress = findViewById<ProgressBar>(R.id.progressDetail)
+        val btnFindStores = findViewById<Button>(R.id.btnFindStores)
+
+        btnFindStores.setOnClickListener {
+            val intent = Intent(this, StoreMapActivity::class.java).apply {
+                putExtra("game_name", name)
+            }
+            startActivity(intent)
+        }
 
         supportActionBar?.title = name
         tvName.text = name

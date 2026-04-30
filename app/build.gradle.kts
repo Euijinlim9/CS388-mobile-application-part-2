@@ -52,6 +52,8 @@ dependencies {
     implementation(libs.retrofit.scalars)
     implementation(libs.okhttp.logging)
     implementation(libs.glide)
+    implementation(libs.google.maps)
+    implementation(libs.google.places)
     implementation(libs.androidx.fragment.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

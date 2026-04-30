@@ -88,6 +88,13 @@
                 android:layout_marginTop="8dp"
                 android:lineSpacingMultiplier="1.4" />
 
+            <Button
+                android:id="@+id/btnFindStores"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📍 Find Stores Near Me"
+                android:layout_marginTop="16dp" />
+
             <ProgressBar
                 android:id="@+id/progressDetail"
                 android:layout_width="wrap_content"
