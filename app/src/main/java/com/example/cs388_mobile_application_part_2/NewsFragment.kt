@@ -2,6 +2,7 @@ package com.example.cs388_mobile_application_part_2
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -102,6 +103,8 @@ class NewsFragment : Fragment() {
                     }
                 }
                 if (name.isNotEmpty()) {
+                    val raw = "name = $name, id = $id, year = $year, rank = ${i + 1}, thumbnail = $thumbnail"
+                    Log.d("Search Result Item Raw", raw)
                     games.add(BoardGame(id, rank, name, thumbnail, year))
                 }
             }

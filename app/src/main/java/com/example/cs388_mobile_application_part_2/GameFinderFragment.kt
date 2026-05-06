@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -188,6 +189,8 @@ class GameFinderFragment : Fragment() {
                     }
                 }
                 if (name.isNotEmpty()) {
+                    val raw = "name = $name, id = $id, year = $year, rank = ${i + 1}"
+                    Log.d("Search Result Item Raw", raw)
                     val game = BoardGame(id, i + 1, name, "", year)
                     results.add(game)
                     fetchThumbnail(game)

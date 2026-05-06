@@ -1,6 +1,7 @@
 package com.example.cs388_mobile_application_part_2
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
@@ -28,6 +29,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.api.net.SearchNearbyRequest
 import java.util.Locale
 
+@SuppressLint("SetTextI18n")
 class StoreMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // map + location clients
@@ -137,13 +139,13 @@ class StoreMapActivity : AppCompatActivity(), OnMapReadyCallback {
             map.clear()
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
             searchNearbyStores(latLng)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Toast.makeText(this, "Error looking up zip code", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun searchNearbyStores(center: LatLng) {
-        val placeFields = listOf(Place.Field.NAME, Place.Field.LAT_LNG, Place.Field.ADDRESS)
+        val placeFields = listOf(Place.Field.DISPLAY_NAME, Place.Field.LOCATION, Place.Field.FORMATTED_ADDRESS)
         // 50km search radius
         val circle = CircularBounds.newInstance(center, 50000.0)
         val request = SearchNearbyRequest.builder(circle, placeFields)
@@ -154,12 +156,12 @@ class StoreMapActivity : AppCompatActivity(), OnMapReadyCallback {
         placesClient.searchNearby(request).addOnSuccessListener { response ->
             // drop blue marker per result
             for (place in response.places) {
-                val latLng = place.latLng ?: continue
+                val latLng = place.location ?: continue
                 map.addMarker(
                     MarkerOptions()
                         .position(latLng)
-                        .title(place.name)
-                        .snippet(place.address)
+                        .title(place.displayName)
+                        .snippet(place.formattedAddress)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                 )
             }
