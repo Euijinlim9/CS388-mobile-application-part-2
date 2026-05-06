@@ -3,6 +3,7 @@ package com.example.cs388_mobile_application_part_2
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
@@ -127,21 +128,31 @@ class StoreMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // converts zip to coordinates
     private fun searchByZipCode(zip: String) {
-        try {
-            val geocoder = Geocoder(this, Locale.US)
-            val results = geocoder.getFromLocationName(zip, 1)
-            if (results.isNullOrEmpty()) {
-                Toast.makeText(this, "Could not find location for zip code $zip", Toast.LENGTH_SHORT).show()
-                return
-            }
-            val location = results[0]
-            val latLng = LatLng(location.latitude, location.longitude)
-            map.clear()
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
-            searchNearbyStores(latLng)
-        } catch (_: Exception) {
-            Toast.makeText(this, "Error looking up zip code", Toast.LENGTH_SHORT).show()
-        }
+        val geocoder = Geocoder(this, Locale.US)
+            geocoder.getFromLocationName(zip, 1, object : Geocoder.GeocodeListener {
+                override fun onGeocode(addresses: MutableList<Address>) {
+                    runOnUiThread {
+                        if (addresses.isEmpty()) {
+                            Toast.makeText(this@StoreMapActivity, "Could not find location for zip code $zip", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val location = addresses[0]
+                            val latLng = LatLng(location.latitude, location.longitude)
+                            updateMapForZip(latLng)
+                        }
+                    }
+                }
+                override fun onError(errorMessage: String?) {
+                    runOnUiThread {
+                        Toast.makeText(this@StoreMapActivity, "Error looking up zip code", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+    }
+
+    private fun updateMapForZip(latLng: LatLng) {
+        map.clear()
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
+        searchNearbyStores(latLng)
     }
 
     private fun searchNearbyStores(center: LatLng) {
