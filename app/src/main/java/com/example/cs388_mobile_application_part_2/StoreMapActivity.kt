@@ -129,24 +129,24 @@ class StoreMapActivity : AppCompatActivity(), OnMapReadyCallback {
     // converts zip to coordinates
     private fun searchByZipCode(zip: String) {
         val geocoder = Geocoder(this, Locale.US)
-            geocoder.getFromLocationName(zip, 1, object : Geocoder.GeocodeListener {
-                override fun onGeocode(addresses: MutableList<Address>) {
-                    runOnUiThread {
-                        if (addresses.isEmpty()) {
-                            Toast.makeText(this@StoreMapActivity, "Could not find location for zip code $zip", Toast.LENGTH_SHORT).show()
-                        } else {
-                            val location = addresses[0]
-                            val latLng = LatLng(location.latitude, location.longitude)
-                            updateMapForZip(latLng)
-                        }
+        geocoder.getFromLocationName(zip, 1, object : Geocoder.GeocodeListener {
+            override fun onGeocode(addresses: MutableList<Address>) {
+                runOnUiThread {
+                    if (addresses.isEmpty()) {
+                        Toast.makeText(this@StoreMapActivity, "Could not find location for zip code $zip", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val location = addresses[0]
+                        val latLng = LatLng(location.latitude, location.longitude)
+                        updateMapForZip(latLng)
                     }
                 }
-                override fun onError(errorMessage: String?) {
-                    runOnUiThread {
-                        Toast.makeText(this@StoreMapActivity, "Error looking up zip code", Toast.LENGTH_SHORT).show()
-                    }
+            }
+            override fun onError(errorMessage: String?) {
+                runOnUiThread {
+                    Toast.makeText(this@StoreMapActivity, "Error looking up zip code", Toast.LENGTH_SHORT).show()
                 }
-            })
+            }
+        })
     }
 
     private fun updateMapForZip(latLng: LatLng) {
