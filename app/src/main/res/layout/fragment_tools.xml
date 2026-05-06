@@ -17,7 +17,7 @@
             android:textStyle="bold"
             android:paddingBottom="16dp" />
 
-        <!-- Tip Calculator -->
+        <!-- Noise Monitor -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,43 +32,65 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="💰 Tip Calculator"
+                    android:text="🎙️ Noise Monitor"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:paddingBottom="8dp" />
-
-                <EditText
-                    android:id="@+id/etBillAmount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Bill amount ($)"
-                    android:inputType="numberDecimal" />
-
-                <EditText
-                    android:id="@+id/etTipPercent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Tip % (e.g. 18)"
-                    android:inputType="numberDecimal" />
-
-                <Button
-                    android:id="@+id/btnCalcTip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Calculate"
-                    android:layout_marginTop="8dp" />
+                    android:paddingBottom="4dp" />
 
                 <TextView
-                    android:id="@+id/tvTipResult"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="Monitors room noise. Keep it quiet for board games!"
+                    android:textSize="13sp"
+                    android:paddingBottom="16dp" />
+
+                <TextView
+                    android:id="@+id/tvDecibelLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="-- dB"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvDecibelLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Press Start to begin"
                     android:textSize="14sp"
-                    android:layout_marginTop="8dp" />
+                    android:gravity="center"
+                    android:paddingBottom="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnStartDecibel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Start"
+                        android:layout_marginEnd="4dp" />
+
+                    <Button
+                        android:id="@+id/btnStopDecibel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Stop"
+                        android:enabled="false"
+                        android:layout_marginStart="4dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Unit Converter -->
+        <!-- Height Measurer -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,93 +105,384 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="📏 Unit Converter (km ↔ miles)"
+                    android:text="📐 Height Measurer"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:paddingBottom="8dp" />
+                    android:paddingBottom="4dp" />
 
-                <EditText
-                    android:id="@+id/etUnitInput"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Place phone on its edge on the table. Press Start, move phone upward, then press Stop."
+                    android:textSize="13sp"
+                    android:paddingBottom="16dp" />
+
+                <TextView
+                    android:id="@+id/tvHeightResult"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter value"
-                    android:inputType="numberDecimal" />
+                    android:text="-- cm"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvHeightLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Press Start to begin"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:paddingBottom="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnStartHeight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Start"
+                        android:layout_marginEnd="4dp" />
+
+                    <Button
+                        android:id="@+id/btnStopHeight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Stop"
+                        android:enabled="false"
+                        android:layout_marginStart="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Shake Detector -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🎲 Shake Detector"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Place phone on table. Monitors shaking for games like Jenga!"
+                    android:textSize="13sp"
+                    android:paddingBottom="16dp" />
+
+                <TextView
+                    android:id="@+id/tvShakeLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvShakeLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Press Start to begin"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:paddingBottom="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnStartShake"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Start"
+                        android:layout_marginEnd="4dp" />
+
+                    <Button
+                        android:id="@+id/btnStopShake"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Stop"
+                        android:enabled="false"
+                        android:layout_marginStart="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Level Meter -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📐 Level Meter"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Place phone flat on table to check if surface is level."
+                    android:textSize="13sp"
+                    android:paddingBottom="16dp" />
+
+                <TextView
+                    android:id="@+id/tvLevelAngle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvLevelLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Press Start to begin"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:paddingBottom="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnStartLevel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Start"
+                        android:layout_marginEnd="4dp" />
+
+                    <Button
+                        android:id="@+id/btnStopLevel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Stop"
+                        android:enabled="false"
+                        android:layout_marginStart="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Light Meter -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💡 Light Meter"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Measures ambient light to ensure good visibility for reading cards and boards."
+                    android:textSize="13sp"
+                    android:paddingBottom="16dp" />
+
+                <TextView
+                    android:id="@+id/tvLightLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="-- lux"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvLightLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Press Start to begin"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:paddingBottom="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnStartLight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Start"
+                        android:layout_marginEnd="4dp" />
+
+                    <Button
+                        android:id="@+id/btnStopLight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Stop"
+                        android:enabled="false"
+                        android:layout_marginStart="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Dice Roller -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🎲 Dice Roller"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Roll virtual dice when physical ones go missing!"
+                    android:textSize="13sp"
+                    android:paddingBottom="16dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
+                    android:paddingBottom="16dp">
 
-                    <Button
-                        android:id="@+id/btnKmToMiles"
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="km → mi"
-                        android:layout_marginEnd="4dp" />
+                        android:orientation="vertical"
+                        android:layout_marginEnd="8dp">
 
-                    <Button
-                        android:id="@+id/btnMilesToKm"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Dice Type"
+                            android:textSize="12sp"
+                            android:paddingBottom="4dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerDiceType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="mi → km"
-                        android:layout_marginStart="4dp" />
+                        android:orientation="vertical"
+                        android:layout_marginStart="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Number of Dice"
+                            android:textSize="12sp"
+                            android:paddingBottom="4dp" />
+
+                        <Spinner
+                            android:id="@+id/spinnerDiceCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvUnitResult"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:layout_marginTop="8dp" />
-
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Password Generator -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🔐 Password Generator"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:paddingBottom="8dp" />
-
-                <EditText
-                    android:id="@+id/etPasswordLength"
+                <Button
+                    android:id="@+id/btnRollDice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password length (e.g. 16)"
-                    android:inputType="number" />
-
-                <Button
-                    android:id="@+id/btnGenPassword"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Generate"
-                    android:layout_marginTop="8dp" />
+                    android:text="Roll Dice"
+                    android:layout_marginBottom="16dp" />
 
                 <TextView
-                    android:id="@+id/tvPassword"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvDiceResults"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:fontFamily="monospace"
-                    android:layout_marginTop="8dp" />
+                    android:text="--"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:paddingBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvDiceTotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total: --"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="center" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
