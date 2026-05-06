@@ -9,6 +9,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.hardware.SensorManager.GRAVITY_EARTH
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
@@ -40,7 +41,6 @@ class ToolsFragment : Fragment(), SensorEventListener {
 
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
-    private var linearAccelerometer: Sensor? = null
     private var isMeasuringHeight = false
     private var verticalVelocity = 0f
     private var heightTraveled = 0f
@@ -138,8 +138,6 @@ class ToolsFragment : Fragment(), SensorEventListener {
 
         sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        linearAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
-
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
 
         btnStartDecibel.setOnClickListener { checkPermissionAndStart() }
@@ -227,7 +225,7 @@ class ToolsFragment : Fragment(), SensorEventListener {
     }
 
     private fun startHeightMeasure() {
-        if (linearAccelerometer == null) { tvHeightLabel.text = "No linear accelerometer found"; return }
+        if (accelerometer == null) { tvHeightLabel.text = "No accelerometer found"; return }
         isMeasuringHeight = true
         verticalVelocity = 0f
         heightTraveled = 0f
@@ -236,7 +234,7 @@ class ToolsFragment : Fragment(), SensorEventListener {
         tvHeightLabel.text = "Move phone upward..."
         btnStartHeight.isEnabled = false
         btnStopHeight.isEnabled = true
-        sensorManager.registerListener(this, linearAccelerometer, SensorManager.SENSOR_DELAY_GAME)
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME)
     }
 
     private fun stopHeightMeasure() {
@@ -331,7 +329,8 @@ class ToolsFragment : Fragment(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent) {
         when (event.sensor.type) {
-            Sensor.TYPE_LINEAR_ACCELERATION ->{
+            Sensor.TYPE_ACCELEROMETER -> {
+                if(isMeasuringHeight){
                     if (lastTimestamp == 0L) {
                         lastTimestamp = event.timestamp
                         return
@@ -340,16 +339,14 @@ class ToolsFragment : Fragment(), SensorEventListener {
                     val dt = (event.timestamp - lastTimestamp) / 1_000_000_000f
                     lastTimestamp = event.timestamp
 
-                    val netVertical = event.values[1]
+                    val netVertical = event.values[1] - GRAVITY_EARTH
 
-                    if (abs(netVertical) < 0.1f) return
+                    if (abs(netVertical) < 0.5f) return
 
                     verticalVelocity += netVertical * dt
                     heightTraveled += verticalVelocity * dt
                     tvHeightResult.text = "%.1f".format(abs(heightTraveled * 100f))
-            }
-            Sensor.TYPE_ACCELEROMETER -> {
-                if (isDetectingShake) {
+                } else if (isDetectingShake) {
                     val x = event.values[0]
                     val y = event.values[1]
                     val z = event.values[2]
@@ -450,15 +447,14 @@ class ToolsFragment : Fragment(), SensorEventListener {
             mediaRecorder?.release()
             mediaRecorder = null
         }
-        if (isDetectingShake || isLevelMeterActive) sensorManager.unregisterListener(this, accelerometer)
-        if (isMeasuringHeight) sensorManager.unregisterListener(this, linearAccelerometer)
+        if (isMeasuringHeight || isDetectingShake || isLevelMeterActive) sensorManager.unregisterListener(this, accelerometer)
         if (isLightMeterActive) sensorManager.unregisterListener(this, lightSensor)
     }
 
     override fun onResume() {
         super.onResume()
         if (isListening) startListening()
-        if (isMeasuringHeight) sensorManager.registerListener(this, linearAccelerometer, SensorManager.SENSOR_DELAY_GAME)
+        if (isMeasuringHeight) sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME)
         if (isDetectingShake) sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME)
         if (isLevelMeterActive) sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI)
         if (isLightMeterActive) sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL)
