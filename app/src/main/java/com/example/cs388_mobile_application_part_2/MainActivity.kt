@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -20,17 +21,29 @@ import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 import com.google.firebase.auth.auth
 import com.google.firebase.initialize
 
-
+@RequiresApi(Build.VERSION_CODES.S)
 class MainActivity : AppCompatActivity() {
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         val cameraGranted = permissions[Manifest.permission.CAMERA] ?: false
+        val audioGranted = permissions[Manifest.permission.RECORD_AUDIO] ?: false
+        var activityGranted = false
+        activityGranted = permissions[Manifest.permission.ACTIVITY_RECOGNITION] ?: false
+
         if (cameraGranted) {
             Log.d("MainActivity", "Camera permission granted")
-        } else {
-            Toast.makeText(this, "Camera permission is required for some features", Toast.LENGTH_SHORT).show()
+        }
+        if (audioGranted) {
+            Log.d("MainActivity", "Microphone permission granted")
+        }
+        if (activityGranted) {
+            Log.d("MainActivity", "Activity recognition permission granted")
+        }
+
+        if (!cameraGranted || !audioGranted) {
+            Toast.makeText(this, "Permissions are required for some features", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -73,6 +86,14 @@ class MainActivity : AppCompatActivity() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             permissionsToRequest.add(Manifest.permission.CAMERA)
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequest.add(Manifest.permission.RECORD_AUDIO)
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequest.add(Manifest.permission.ACTIVITY_RECOGNITION)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

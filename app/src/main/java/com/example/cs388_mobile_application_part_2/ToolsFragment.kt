@@ -1,6 +1,7 @@
 package com.example.cs388_mobile_application_part_2
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -9,6 +10,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.media.MediaRecorder
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -18,11 +20,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import kotlin.math.abs
 import kotlin.math.log10
+import androidx.core.graphics.toColorInt
 
+@SuppressLint("SetTextI18n")
+@RequiresApi(Build.VERSION_CODES.S)
 class ToolsFragment : Fragment(), SensorEventListener {
 
     private var mediaRecorder: MediaRecorder? = null
@@ -37,6 +43,7 @@ class ToolsFragment : Fragment(), SensorEventListener {
 
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
+    private var linearAccelerometer: Sensor? = null
     private var isMeasuringHeight = false
     private var verticalVelocity = 0f
     private var heightTraveled = 0f
@@ -47,7 +54,6 @@ class ToolsFragment : Fragment(), SensorEventListener {
     private lateinit var btnStopHeight: Button
 
     private var isDetectingShake = false
-    private var lastShakeTime = 0L
     private var lastX = 0f
     private var lastY = 0f
     private var lastZ = 0f
@@ -135,6 +141,8 @@ class ToolsFragment : Fragment(), SensorEventListener {
 
         sensorManager = requireContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        linearAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
+
         lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
 
         btnStartDecibel.setOnClickListener { checkPermissionAndStart() }
@@ -159,9 +167,10 @@ class ToolsFragment : Fragment(), SensorEventListener {
         }
     }
 
+
     private fun startListening() {
         try {
-            mediaRecorder = MediaRecorder().apply {
+            mediaRecorder = MediaRecorder(requireContext()).apply {
                 setAudioSource(MediaRecorder.AudioSource.MIC)
                 setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
                 setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
@@ -174,7 +183,7 @@ class ToolsFragment : Fragment(), SensorEventListener {
             btnStartDecibel.isEnabled = false
             btnStopDecibel.isEnabled = true
             handler.post(decibelRunnable)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             tvDecibelLabel.text = "Error starting microphone"
             isListening = false
             btnStartDecibel.isEnabled = true
@@ -207,11 +216,11 @@ class ToolsFragment : Fragment(), SensorEventListener {
                         tvDecibelLabel.text = "⚠️ TOO LOUD! Keep it down!"
                     }
                     db >= ORANGE_THRESHOLD -> {
-                        tvDecibelLevel.setTextColor(Color.parseColor("#FF6600"))
+                        tvDecibelLevel.setTextColor("#FF6600".toColorInt())
                         tvDecibelLabel.text = "Getting loud..."
                     }
                     else -> {
-                        tvDecibelLevel.setTextColor(Color.parseColor("#2E7D32"))
+                        tvDecibelLevel.setTextColor("#2E7D32".toColorInt())
                         tvDecibelLabel.text = "✅ Nice and quiet"
                     }
                 }
@@ -221,7 +230,7 @@ class ToolsFragment : Fragment(), SensorEventListener {
     }
 
     private fun startHeightMeasure() {
-        if (accelerometer == null) { tvHeightLabel.text = "No accelerometer found"; return }
+        if (linearAccelerometer == null) { tvHeightLabel.text = "No linear accelerometer found"; return }
         isMeasuringHeight = true
         verticalVelocity = 0f
         heightTraveled = 0f
@@ -230,7 +239,7 @@ class ToolsFragment : Fragment(), SensorEventListener {
         tvHeightLabel.text = "Move phone upward..."
         btnStartHeight.isEnabled = false
         btnStopHeight.isEnabled = true
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME)
+        sensorManager.registerListener(this, linearAccelerometer, SensorManager.SENSOR_DELAY_GAME)
     }
 
     private fun stopHeightMeasure() {
@@ -250,7 +259,7 @@ class ToolsFragment : Fragment(), SensorEventListener {
         lastY = 0f
         lastZ = 0f
         tvShakeLevel.text = "0.0"
-        tvShakeLevel.setTextColor(Color.parseColor("#2E7D32"))
+        tvShakeLevel.setTextColor("#2E7D32".toColorInt())
         tvShakeLabel.text = "Monitoring table..."
         btnStartShake.isEnabled = false
         btnStopShake.isEnabled = true
@@ -271,7 +280,7 @@ class ToolsFragment : Fragment(), SensorEventListener {
         if (accelerometer == null) { tvLevelLabel.text = "No accelerometer found"; return }
         isLevelMeterActive = true
         tvLevelAngle.text = "0.0°"
-        tvLevelAngle.setTextColor(Color.parseColor("#2E7D32"))
+        tvLevelAngle.setTextColor("#2E7D32".toColorInt())
         tvLevelLabel.text = "Measuring..."
         btnStartLevel.isEnabled = false
         btnStopLevel.isEnabled = true
@@ -292,7 +301,7 @@ class ToolsFragment : Fragment(), SensorEventListener {
         if (lightSensor == null) { tvLightLabel.text = "No light sensor found"; return }
         isLightMeterActive = true
         tvLightLevel.text = "0 lux"
-        tvLightLevel.setTextColor(Color.parseColor("#2E7D32"))
+        tvLightLevel.setTextColor("#2E7D32".toColorInt())
         tvLightLabel.text = "Measuring..."
         btnStartLight.isEnabled = false
         btnStopLight.isEnabled = true
@@ -325,8 +334,7 @@ class ToolsFragment : Fragment(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent) {
         when (event.sensor.type) {
-            Sensor.TYPE_ACCELEROMETER -> {
-                if (isMeasuringHeight) {
+            Sensor.TYPE_LINEAR_ACCELERATION ->{
                     if (lastTimestamp == 0L) {
                         lastTimestamp = event.timestamp
                         return
@@ -335,13 +343,16 @@ class ToolsFragment : Fragment(), SensorEventListener {
                     val dt = (event.timestamp - lastTimestamp) / 1_000_000_000f
                     lastTimestamp = event.timestamp
 
-                    val netVertical = event.values[1] - SensorManager.GRAVITY_EARTH
+                    val netVertical = event.values[1]
 
-                    if (abs(netVertical) < 0.5f) return
+                    if (abs(netVertical) < 0.1f) return
 
                     verticalVelocity += netVertical * dt
                     heightTraveled += verticalVelocity * dt
-                } else if (isDetectingShake) {
+                    tvHeightResult.text = "%.1f".format(abs(heightTraveled * 100f))
+            }
+            Sensor.TYPE_ACCELEROMETER -> {
+                if (isDetectingShake) {
                     val x = event.values[0]
                     val y = event.values[1]
                     val z = event.values[2]
@@ -360,15 +371,15 @@ class ToolsFragment : Fragment(), SensorEventListener {
                                 tvShakeLabel.text = "⚠️ HEAVY SHAKE! Careful!"
                             }
                             shakeForce >= SHAKE_THRESHOLD_MODERATE -> {
-                                tvShakeLevel.setTextColor(Color.parseColor("#FF6600"))
+                                tvShakeLevel.setTextColor("#FF6600".toColorInt())
                                 tvShakeLabel.text = "Moderate shaking detected"
                             }
                             shakeForce >= SHAKE_THRESHOLD_LIGHT -> {
-                                tvShakeLevel.setTextColor(Color.parseColor("#FFA500"))
+                                tvShakeLevel.setTextColor("#FFA500".toColorInt())
                                 tvShakeLabel.text = "Light shake detected"
                             }
                             else -> {
-                                tvShakeLevel.setTextColor(Color.parseColor("#2E7D32"))
+                                tvShakeLevel.setTextColor("#2E7D32".toColorInt())
                                 tvShakeLabel.text = "✅ Table is stable"
                             }
                         }
@@ -391,11 +402,11 @@ class ToolsFragment : Fragment(), SensorEventListener {
 
                     when {
                         totalTilt <= LEVEL_THRESHOLD_PERFECT -> {
-                            tvLevelAngle.setTextColor(Color.parseColor("#2E7D32"))
+                            tvLevelAngle.setTextColor("#2E7D32".toColorInt())
                             tvLevelLabel.text = "✅ Perfectly level!"
                         }
                         totalTilt <= LEVEL_THRESHOLD_GOOD -> {
-                            tvLevelAngle.setTextColor(Color.parseColor("#FFA500"))
+                            tvLevelAngle.setTextColor("#FFA500".toColorInt())
                             tvLevelLabel.text = "Nearly level"
                         }
                         else -> {
@@ -412,19 +423,19 @@ class ToolsFragment : Fragment(), SensorEventListener {
 
                     when {
                         lux < LIGHT_THRESHOLD_DIM -> {
-                            tvLightLevel.setTextColor(Color.parseColor("#1565C0"))
+                            tvLightLevel.setTextColor("#1565C0".toColorInt())
                             tvLightLabel.text = "🌙 Too dark - turn on lights!"
                         }
                         lux < LIGHT_THRESHOLD_MODERATE -> {
-                            tvLightLevel.setTextColor(Color.parseColor("#FFA500"))
+                            tvLightLevel.setTextColor("#FFA500".toColorInt())
                             tvLightLabel.text = "💡 Dim lighting"
                         }
                         lux < LIGHT_THRESHOLD_BRIGHT -> {
-                            tvLightLevel.setTextColor(Color.parseColor("#2E7D32"))
+                            tvLightLevel.setTextColor("#2E7D32".toColorInt())
                             tvLightLabel.text = "✅ Good lighting for games"
                         }
                         else -> {
-                            tvLightLevel.setTextColor(Color.parseColor("#FF6600"))
+                            tvLightLevel.setTextColor("#FF6600".toColorInt())
                             tvLightLabel.text = "☀️ Very bright"
                         }
                     }
@@ -442,14 +453,15 @@ class ToolsFragment : Fragment(), SensorEventListener {
             mediaRecorder?.release()
             mediaRecorder = null
         }
-        if (isMeasuringHeight || isDetectingShake || isLevelMeterActive) sensorManager.unregisterListener(this, accelerometer)
+        if (isDetectingShake || isLevelMeterActive) sensorManager.unregisterListener(this, accelerometer)
+        if (isMeasuringHeight) sensorManager.unregisterListener(this, linearAccelerometer)
         if (isLightMeterActive) sensorManager.unregisterListener(this, lightSensor)
     }
 
     override fun onResume() {
         super.onResume()
         if (isListening) startListening()
-        if (isMeasuringHeight) sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME)
+        if (isMeasuringHeight) sensorManager.registerListener(this, linearAccelerometer, SensorManager.SENSOR_DELAY_GAME)
         if (isDetectingShake) sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME)
         if (isLevelMeterActive) sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI)
         if (isLightMeterActive) sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL)
